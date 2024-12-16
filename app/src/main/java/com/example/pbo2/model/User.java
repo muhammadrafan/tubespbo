@@ -1,26 +1,50 @@
 package com.example.pbo2.model;
 
-import android.os.Bundle;
+public class User {
+    // Atribut
+    private String name;
+    private String phoneNumber;
+    private int age;
+    private String role;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+    // Konstruktor
+    public User(String name, String phoneNumber, int age, String role) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.age = age;
+        this.role = role;
+    }
 
-import com.example.pbo2.R;
+    // Getter dan Setter
+    public String getName() {
+        return name;
+    }
 
-public class User extends AppCompatActivity {
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_login);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
