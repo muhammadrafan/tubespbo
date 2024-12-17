@@ -19,9 +19,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register1);
-        TextInputLayout  textinputrole = findViewById(R.id.inputlayout);
-        MaterialAutoCompleteTextView autoCompleteTextView = findViewById(R.id.inputTv);
-        Button button = findViewById(R.id.btn);
+        TextInputLayout  textinputrole = findViewById(R.id.register_roles);
+        MaterialAutoCompleteTextView autoCompleteTextView = findViewById(R.id.inputrole);
+        Button button = findViewById(R.id.btn_register);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override

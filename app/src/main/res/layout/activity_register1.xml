@@ -29,6 +29,7 @@
             android:textStyle="bold"
             android:fontFamily=""/>
          <TextView
+             android:id="@+id/reg_textlogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/yellow"
@@ -43,6 +44,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <EditText
+            android:id="@+id/register_nama"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nama Lengkap"
@@ -51,6 +53,7 @@
             android:padding="10dp"
             android:layout_marginTop="20dp"/>
         <EditText
+            android:id="@+id/register_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="phone"
@@ -61,17 +64,18 @@
             android:layout_marginTop="10dp"/>
 
         <EditText
+            android:id="@+id/register_umur"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="date"
-            android:hint="Tempat Tanggal Lahir"
+            android:inputType="text"
+            android:hint="Umur"
             android:textSize="20sp"
             android:background="@drawable/rounded_corner"
             android:padding="10dp"
             android:layout_marginTop="10dp"/>
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:id="@+id/inputlayout"
+            android:id="@+id/register_roles"
             android:layout_height="wrap_content"
             android:hint="Daftar Sebagai"
             android:textColorHint="@color/grey"
@@ -83,12 +87,13 @@
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/inputTv"
+                android:id="@+id/inputrole"
                 android:inputType="none"
                 app:simpleItems="@array/options_list"/>
 
         </com.google.android.material.textfield.TextInputLayout>
         <EditText
+            android:id="@+id/register_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
@@ -100,7 +105,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btn"
+            android:id="@+id/btn_register"
             android:layout_marginTop="10dp"
             android:text="Daftar"
             android:backgroundTint="@color/green"/>
