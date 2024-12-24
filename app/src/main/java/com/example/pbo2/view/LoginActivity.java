@@ -1,20 +1,23 @@
 package com.example.pbo2.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pbo2.R;
 import com.example.pbo2.controller.UserController;
-import com.example.pbo2.model.MainActivity;
 import com.example.pbo2.model.User;
 
 public class LoginActivity extends AppCompatActivity implements UserController.LoginCallback {
+    private Context context;
     private TextView textRegister;
     private EditText etPhoneNumber, etPassword;
     private Button btnLogin;
@@ -56,12 +59,18 @@ public class LoginActivity extends AppCompatActivity implements UserController.L
     // Implementasi callback login success
     @Override
     public void onLoginSuccess(User user) {
-        // Pindah ke halaman selanjutnya
+        // Simpan data ke SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("USER_ID", user.getId());
+        editor.putString("USER_NAME", user.getName());
+        editor.putBoolean("IS_LOGGED_IN", true);
+        editor.apply();
+
+        // Pindah ke halaman utama
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        intent.putExtra("USER_ID", user.getId());
-        intent.putExtra("USER_NAME", user.getName());
         startActivity(intent);
-        finish(); // Tutup login activity
+        finish();
     }
 
     // Implementasi callback login failure

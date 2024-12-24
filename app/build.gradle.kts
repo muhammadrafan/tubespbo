@@ -1,3 +1,5 @@
+
+
 plugins {
     alias(libs.plugins.android.application)
 }
@@ -37,8 +39,17 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation(files("libs/gson-2.11.0.jar"))
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
+    implementation (libs.glide)
+    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
+    implementation ("com.google.android.gms:play-services-maps:18.1.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+    //implementation(files("libs/gson-2.11.0.jar"))
     implementation(files("libs/mysql-connector-java-8.0.27"))
+    implementation(libs.play.services.location)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

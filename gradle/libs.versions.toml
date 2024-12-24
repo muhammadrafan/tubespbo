@@ -7,6 +7,11 @@ appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.8.0"
 constraintlayout = "2.2.0"
+playserviceslocation = "21.3.0"
+retrofit = "2.9.0"
+okhttp = "4.9.0"
+glide = "4.15.1"
+
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -16,7 +21,12 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playserviceslocation" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+#glide_compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 

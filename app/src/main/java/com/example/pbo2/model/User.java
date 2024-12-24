@@ -5,12 +5,12 @@ public class User {
     private int id; // Tambahkan id untuk database
     private String name;
     private String phoneNumber;
-    private int age;
+    private String age;
     private String role;
     private String password; // Tambahkan atribut password
 
     // Konstruktor
-    public User(int id, String name, String phoneNumber, int age, String role, String password) {
+    public User(int id, String name, String phoneNumber, String age, String role, String password) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
@@ -43,11 +43,11 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 

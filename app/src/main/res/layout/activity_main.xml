@@ -1,19 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".model.MainActivity">
+    tools:context=".view.MainActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_gravity="right">
+        <ImageView
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/map_pin"/>
+        <TextView
+            android:id="@+id/kota"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="20dp"
+            android:gravity="left"
+            android:text=""/>
+    </LinearLayout>
 
-    <TextView
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/container"
+        android:padding="16dp"
+        android:layout_margin="8dp">
+
+    <!-- Bagian Teks -->
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_alignParentStart="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Teks Salam -->
+        <TextView
+            android:id="@+id/tv_greeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hi, Budi"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <!-- Teks Promosi -->
+        <TextView
+            android:id="@+id/tv_promo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kamu Dapat Promo!!\nAda sekitar 14 promo menanti untuk digunakan."
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="4dp"
+            android:textSize="14sp"
+            android:lineSpacingExtra="2dp"/>
+
+        <!-- Tombol Pakai -->
+        <Button
+            android:id="@+id/btn_pakai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_promo"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#FFFFFF"
+            android:text="Pakai"
+            android:textColor="#4CAF50"
+            android:textStyle="bold"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"/>
+    </LinearLayout>
+        <ImageView
+            android:id="@+id/img_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/wrench"/>
+</RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cari Bengkel"
+            android:textStyle="bold"
+            android:paddingLeft="20dp"
+            android:textSize="20sp"/>
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.example.pbo2.widget.search_bar
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:layout_marginRight="25dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:background="@drawable/bg_form_pencarian"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+                <ImageView
+                    android:src="@drawable/ls_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"/>
+                <TextView
+                    android:text="Bengkel..."
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </com.example.pbo2.widget.search_bar>
+        </androidx.appcompat.widget.Toolbar>
+    </LinearLayout>
+<androidx.core.widget.NestedScrollView
+    android:layout_weight="1"
+    android:scrollbars="none"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <include layout="@layout/ly_scroll_bengkel"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.core.widget.NestedScrollView>
+<com.google.android.material.bottomnavigation.BottomNavigationView
+   app:menu="@menu/menu_footer"
+    app:labelVisibilityMode="labeled"
+    android:id="@+id/navigation_bottom"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@color/green" />
+</androidx.appcompat.widget.LinearLayoutCompat>

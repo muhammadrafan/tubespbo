@@ -29,6 +29,7 @@
             android:textStyle="bold"
             android:fontFamily=""/>
         <TextView
+            android:id="@+id/regbengkel_textlogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/yellow"
@@ -43,6 +44,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <EditText
+            android:id="@+id/register_bengkel_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
@@ -52,6 +54,7 @@
             android:padding="10dp"
             android:layout_marginTop="20dp"/>
         <EditText
+            android:id="@+id/register_bengkel_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
@@ -61,6 +64,7 @@
             android:padding="10dp"
             android:layout_marginTop="10dp"/>
         <EditText
+            android:id="@+id/register_bengkel_open"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
@@ -69,11 +73,27 @@
             android:background="@drawable/rounded_corner"
             android:padding="10dp"
             android:layout_marginTop="10dp"/>
+        <Button
+            android:id="@+id/btn_preview_map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Preview Lokasi di Maps"
+            android:backgroundTint="@color/green"/>
+
+
+        <Button
+            android:id="@+id/register_bengkel_upload_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Pilih Gambar Bengkel"
+            android:backgroundTint="@color/green" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btn"
+            android:id="@+id/btn_register_bengkel"
             android:layout_marginTop="10dp"
             android:text="Daftar"
             android:backgroundTint="@color/green"/>
