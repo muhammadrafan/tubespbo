@@ -8,15 +8,17 @@ public class User {
     private String age;
     private String role;
     private String password; // Tambahkan atribut password
+    private String imageUser; // Tambahkan atribut untuk gambar profil
 
     // Konstruktor
-    public User(int id, String name, String phoneNumber, String age, String role, String password) {
+    public User(int id, String name, String phoneNumber, String age, String role, String password, String imageUser) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.age = age;
         this.role = role;
         this.password = password;
+        this.imageUser = imageUser;
     }
 
     // Getter dan Setter
@@ -27,6 +29,7 @@ public class User {
     public void setId(int id) {
         this.id = id;
     }
+
     public String getName() {
         return name;
     }
@@ -65,5 +68,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getImageUser() {
+        return imageUser;
+    }
+
+    public void setImageUser(String imageUser) {
+        this.imageUser = imageUser;
     }
 }

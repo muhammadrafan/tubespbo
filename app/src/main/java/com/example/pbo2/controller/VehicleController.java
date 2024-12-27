@@ -26,34 +26,43 @@ public class VehicleController {
         this.context = context;
     }
 
-    public void addVehicle(String merek, String model, int tahun, boolean isDamaged, Uri imageUri) {
+    // Callback untuk pengiriman data kendaraan
+    public interface VehicleCallback {
+        void onSuccess(String message);
+        void onFailure(String errorMessage);
+    }
+
+    public void addVehicle(String merek, String model, int tahun, boolean isDamaged, String imagePath, VehicleCallback callback) {
         ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
 
-        // Konversi data menjadi Multipart
+        // File dan request body untuk foto kendaraan
+        File file = new File(imagePath);
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpeg"), file);
+        MultipartBody.Part fotoKendaraan = MultipartBody.Part.createFormData("fotoKendaraan", file.getName(), requestFile);
+
+        // Request body untuk data lainnya
         RequestBody merekBody = RequestBody.create(MediaType.parse("text/plain"), merek);
         RequestBody modelBody = RequestBody.create(MediaType.parse("text/plain"), model);
         RequestBody tahunBody = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(tahun));
-        RequestBody isDamagedBody = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(isDamaged));
-        File imageFile = new File(imageUri.getPath());
-        RequestBody imageBody = RequestBody.create(MediaType.parse("image/*"), imageFile);
-        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("foto_kendaraan", imageFile.getName(), imageBody);
+        RequestBody isDamagedBody = RequestBody.create(MediaType.parse("text/plain"), isDamaged ? "1" : "0");
 
         // Panggil API
-        Call<ResponseBody> call = apiService.addVehicle(merekBody, modelBody, tahunBody, isDamagedBody, imagePart);
+        Call<ResponseBody> call = apiService.addVehicle(merekBody, modelBody, tahunBody, isDamagedBody, fotoKendaraan);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(context, "Kendaraan berhasil ditambahkan!", Toast.LENGTH_SHORT).show();
+                    callback.onSuccess("Data kendaraan berhasil ditambahkan.");
                 } else {
-                    Toast.makeText(context, "Gagal menambahkan kendaraan.", Toast.LENGTH_SHORT).show();
+                    callback.onFailure("Gagal menambahkan data kendaraan. " + response.message());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                callback.onFailure("Kesalahan: " + t.getMessage());
             }
         });
     }
 }
+

@@ -6,5 +6,10 @@
     <color name="yellow">#EF9F27</color>
     <color name="inputColor">#dedede</color>
     <color name="green">#4AAD54</color>
+    <color name="primary">#4CAF50</color>
+    <color name="background_light">#F5F5F5</color>
+    <color name="gray_light">#E0E0E0</color>
+    <color name="gray_dark">#757575</color>
+
 
 </resources>

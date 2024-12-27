@@ -1,7 +1,9 @@
 package com.example.pbo2.view;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,14 +14,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pbo2.R;
 import com.example.pbo2.controller.UserController;
+import com.example.pbo2.helper.FileUtils;
 
 public class RegisterActivity extends AppCompatActivity implements UserController.RegisterCallback {
+    private static final int PICK_IMAGE_REQUEST = 100;
+    private static final int REQUEST_BENGKEL = 1;
+
     private EditText regName, regPhone, regAge, regPassword, regInputRoles;
-    private TextView reg_login;
-    private Button btnRegister;
+    private TextView regLogin;
+    private Button btnRegister, uploadImageButton;
     private UserController userController;
 
-    private static final int REQUEST_BENGKEL = 1;
+    private String selectedImagePath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,56 +33,64 @@ public class RegisterActivity extends AppCompatActivity implements UserControlle
         setContentView(R.layout.activity_register1);
 
         // Inisialisasi View
-        reg_login = findViewById(R.id.reg_textlogin);
+        regLogin = findViewById(R.id.reg_textlogin);
         regName = findViewById(R.id.register_nama);
         regPhone = findViewById(R.id.register_phone);
         regAge = findViewById(R.id.register_umur);
         regPassword = findViewById(R.id.register_password);
         regInputRoles = findViewById(R.id.inputrole);
+        uploadImageButton = findViewById(R.id.register_upload_image_profile);
         btnRegister = findViewById(R.id.btn_register);
 
         // Inisialisasi Controller
         userController = new UserController(this, this);
-        reg_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
+
+        // Tombol login
+        regLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(intent);
         });
 
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = regName.getText().toString().trim();
-                String phoneNumber = regPhone.getText().toString().trim();
-                String age = regAge.getText().toString().trim();
-                String password = regPassword.getText().toString().trim();
-                String role = regInputRoles.getText().toString().trim();
+        // Tombol pilih gambar
+        uploadImageButton.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType("image/*");
+            startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        });
 
-                // Validasi Input
-                if (name.isEmpty() || phoneNumber.isEmpty() || age.isEmpty() || password.isEmpty() || role.isEmpty()) {
-                    Toast.makeText(RegisterActivity.this, "Mohon isi semua data!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        // Tombol register
+        btnRegister.setOnClickListener(v -> {
+            String name = regName.getText().toString().trim();
+            String phoneNumber = regPhone.getText().toString().trim();
+            String age = regAge.getText().toString().trim();
+            String password = regPassword.getText().toString().trim();
+            String role = regInputRoles.getText().toString().trim();
 
-                // Log untuk Debugging
-                System.out.println("Role yang dipilih: " + role);
+            // Validasi input
+            if (name.isEmpty() || phoneNumber.isEmpty() || age.isEmpty() || password.isEmpty() || role.isEmpty()) {
+                Toast.makeText(RegisterActivity.this, "Mohon isi semua data!", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                // Pengecekan Role
-                if ("Bengkel".equals(role)) {
-                    // Role Bengkel, arahkan ke RegisterBengkelActivity
-                    Intent intent = new Intent(RegisterActivity.this, RegisterBengkelActivity.class);
-                    intent.putExtra("USER_NAME", name);
-                    intent.putExtra("USER_PHONE", phoneNumber);
-                    intent.putExtra("USER_AGE", age);
-                    intent.putExtra("USER_ROLE", role);
-                    intent.putExtra("USER_PASSWORD", password);
-                    startActivityForResult(intent, REQUEST_BENGKEL);
-                } else {
-                    // Role lain, langsung registrasi
-                    userController.register(name, phoneNumber, age, role, password, null, null, null, null,0,0);
-                }
+            // Validasi gambar
+            if (selectedImagePath == null) {
+                Toast.makeText(RegisterActivity.this, "Mohon pilih gambar profil!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if ("Bengkel".equals(role)) {
+                // Role Bengkel, arahkan ke RegisterBengkelActivity
+                Intent intent = new Intent(RegisterActivity.this, RegisterBengkelActivity.class);
+                intent.putExtra("USER_NAME", name);
+                intent.putExtra("USER_PHONE", phoneNumber);
+                intent.putExtra("USER_AGE", age);
+                intent.putExtra("USER_ROLE", role);
+                intent.putExtra("USER_PASSWORD", password);
+                intent.putExtra("USER_IMAGE", selectedImagePath);
+                startActivityForResult(intent, REQUEST_BENGKEL);
+            } else {
+                // Role lain, langsung registrasi
+                userController.register(name, phoneNumber, age, role, password, null, null, null, selectedImagePath, 0, 0);
             }
         });
     }
@@ -84,6 +98,11 @@ public class RegisterActivity extends AppCompatActivity implements UserControlle
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+            selectedImagePath = FileUtils.getPath(this, uri);
+        }
+
         if (requestCode == REQUEST_BENGKEL && resultCode == RESULT_OK && data != null) {
             // Ambil data tambahan dari RegisterBengkelActivity
             String name = data.getStringExtra("USER_NAME");
@@ -106,7 +125,6 @@ public class RegisterActivity extends AppCompatActivity implements UserControlle
     @Override
     public void onRegisterSuccess(int userId, String name, String phoneNumber, String age, String role) {
         Toast.makeText(this, "Registrasi berhasil!", Toast.LENGTH_SHORT).show();
-        // Arahkan ke LoginActivity setelah registrasi berhasil
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
@@ -114,7 +132,6 @@ public class RegisterActivity extends AppCompatActivity implements UserControlle
 
     @Override
     public void onRegisterFailure(String errorMessage) {
-        // Tampilkan pesan kesalahan
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 }

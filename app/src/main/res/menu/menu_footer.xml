@@ -5,13 +5,13 @@
         android:id="@+id/home"
         android:title="home" />
     <item
-        android:icon="@drawable/map_pin"
-        android:id="@+id/location"
-        android:title="loction" />
+        android:icon="@drawable/history"
+        android:id="@+id/history"
+        android:title="history" />
     <item
-        android:icon="@drawable/chat"
-        android:id="@+id/chat"
-        android:title="chat" />
+        android:icon="@drawable/order"
+        android:id="@+id/order"
+        android:title="order" />
     <item
         android:icon="@drawable/user"
         android:id="@+id/account"

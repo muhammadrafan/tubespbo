@@ -87,24 +87,33 @@ public class UserController {
 
         ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
 
-        RequestBody latitudeBody = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(latitude));
-        RequestBody longitudeBody = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(longitude));
-
+        // Buat RequestBody untuk parameter
         RequestBody nameBody = RequestBody.create(MediaType.parse("text/plain"), name);
         RequestBody phoneNumberBody = RequestBody.create(MediaType.parse("text/plain"), phoneNumber);
         RequestBody ageBody = RequestBody.create(MediaType.parse("text/plain"), age);
         RequestBody roleBody = RequestBody.create(MediaType.parse("text/plain"), role);
         RequestBody passwordBody = RequestBody.create(MediaType.parse("text/plain"), password);
-        RequestBody bengkelNameBody = RequestBody.create(MediaType.parse("text/plain"), bengkelName);
-        RequestBody bengkelAddressBody = RequestBody.create(MediaType.parse("text/plain"), bengkelAddress);
-        RequestBody bengkelOpenBody = RequestBody.create(MediaType.parse("text/plain"), bengkelOpen);
 
-        File file = new File(imagePath);
-        RequestBody fileBody = RequestBody.create(MediaType.parse("image/jpeg"), file);
-        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("bengkelImage", file.getName(), fileBody);
+        // File gambar profil
+        MultipartBody.Part profileImagePart = null;
+        if (imagePath != null) {
+            File file = new File(imagePath);
+            RequestBody fileBody = RequestBody.create(MediaType.parse("image/jpeg"), file);
+            profileImagePart = MultipartBody.Part.createFormData("profileImage", file.getName(), fileBody);
+        }
 
-        Call<ResponseBody> call = apiService.registerBengkel(nameBody, phoneNumberBody, ageBody, roleBody, passwordBody,
-                bengkelNameBody, bengkelAddressBody, bengkelOpenBody, imagePart, latitudeBody, longitudeBody);
+        // Parameter opsional untuk Bengkel
+        RequestBody bengkelNameBody = bengkelName != null ? RequestBody.create(MediaType.parse("text/plain"), bengkelName) : null;
+        RequestBody bengkelAddressBody = bengkelAddress != null ? RequestBody.create(MediaType.parse("text/plain"), bengkelAddress) : null;
+        RequestBody bengkelOpenBody = bengkelOpen != null ? RequestBody.create(MediaType.parse("text/plain"), bengkelOpen) : null;
+        RequestBody latitudeBody = latitude != 0 ? RequestBody.create(MediaType.parse("text/plain"), String.valueOf(latitude)) : null;
+        RequestBody longitudeBody = longitude != 0 ? RequestBody.create(MediaType.parse("text/plain"), String.valueOf(longitude)) : null;
+
+        // Panggil API
+        Call<ResponseBody> call = apiService.register(
+                nameBody, phoneNumberBody, ageBody, roleBody, passwordBody, profileImagePart,
+                bengkelNameBody, bengkelAddressBody, bengkelOpenBody, latitudeBody, longitudeBody
+        );
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -113,15 +122,15 @@ public class UserController {
                     registerCallback.onRegisterSuccess(1, name, phoneNumber, age, role);
                     Toast.makeText(context, "Registrasi Berhasil!", Toast.LENGTH_SHORT).show();
                 } else {
-                    registerCallback.onRegisterFailure("Registrasi gagal.");
-                    Toast.makeText(context, "Registrasi gagal.", Toast.LENGTH_SHORT).show();
+                    registerCallback.onRegisterFailure("Registrasi gagal. Coba lagi.");
+                    Toast.makeText(context, "Registrasi gagal. Coba lagi.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                registerCallback.onRegisterFailure("Gagal menghubungi server.");
-                Toast.makeText(context, "Gagal menghubungi server.", Toast.LENGTH_SHORT).show();
+                registerCallback.onRegisterFailure("Gagal menghubungi server: " + t.getMessage());
+                Toast.makeText(context, "Gagal menghubungi server: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

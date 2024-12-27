@@ -1,6 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tambah Kendaraan"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Foto Kendaraan -->
+        <ImageView
+            android:id="@+id/image_vehicle"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:src="@drawable/error_image"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="Foto Kendaraan" />
+
+        <Button
+            android:id="@+id/btn_select_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pilih Gambar"
+            android:layout_gravity="center"
+            android:background="@color/green"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Merek -->
+        <EditText
+            android:id="@+id/et_merek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Merek Kendaraan"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Model -->
+        <EditText
+            android:id="@+id/et_model"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Model Kendaraan"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Tahun -->
+        <EditText
+            android:id="@+id/et_tahun"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tahun Kendaraan"
+            android:inputType="number"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Kerusakan -->
+        <CheckBox
+            android:id="@+id/cb_is_damaged"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Apakah Kendaraan Rusak?"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/btn_submit_vehicle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simpan Kendaraan"
+            android:backgroundTint="@color/green"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</ScrollView>

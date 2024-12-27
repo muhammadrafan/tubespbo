@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity implements UserController.L
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("USER_ID", user.getId());
         editor.putString("USER_NAME", user.getName());
+        editor.putString("ROLE", user.getRole()); // Tambahkan role pengguna
         editor.putBoolean("IS_LOGGED_IN", true);
         editor.apply();
 
