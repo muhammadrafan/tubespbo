@@ -17,7 +17,7 @@ import com.example.pbo2.model.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class AccountActivity extends AppCompatActivity {
-    private LinearLayout alamatBengkelSection, tambahKendaraanSection;
+    private LinearLayout alamatBengkelSection, tambahKendaraanSection,updateAccout,changePassword;
     private NavigationController navigationController;
     private AccountController accountController;
     private ImageView imageProfile;
@@ -28,9 +28,11 @@ public class AccountActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
         setContentView(R.layout.menu_usser);
 
+        updateAccout = findViewById(R.id.informasi_akun);
         alamatBengkelSection = findViewById(R.id.alamat_bengkel);
         tambahKendaraanSection = findViewById(R.id.tambah_kendaraan);
         imageProfile = findViewById(R.id.image_profile);
+        changePassword = findViewById(R.id.password);
 
         String role = sharedPreferences.getString("ROLE", "");
         if ("Pengguna".equalsIgnoreCase(role)) {
@@ -59,10 +61,23 @@ public class AccountActivity extends AppCompatActivity {
             });
         }
 
+        updateAccout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), NewProfileActivity.class));
+            }
+        });
+        changePassword.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ChangePasswordActivity.class));
+            }
+        }));
+
         tambahKendaraanSection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), AddVehicleActivity.class));
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
 

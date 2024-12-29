@@ -1,5 +1,6 @@
 package com.example.pbo2.helper;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -46,6 +47,7 @@ public class FileUtils {
         return null;
     }
 
+    @SuppressLint("Range")
     public static String getFileName(Context context, Uri uri) {
         String result = null;
         if (uri.getScheme().equals("content")) {

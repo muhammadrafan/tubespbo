@@ -42,15 +42,25 @@ public interface ApiService {
             @Part("latitude") RequestBody latitude, // Opsional
             @Part("longitude") RequestBody longitude // Opsional
     );
+
+
     @Multipart
-    @POST("addVehicle")
-    Call<ResponseBody> addVehicle(
-            @Part("merek") RequestBody merek,
-            @Part("model") RequestBody model,
-            @Part("tahun") RequestBody tahun,
-            @Part("isDamaged") RequestBody isDamaged,
-            @Part MultipartBody.Part fotoKendaraan
+    @POST("user/update")
+    Call<ResponseBody> updateAccount(
+            @Query("id") int id,
+            @Query("name") String name,
+            @Query("phone") String phone,
+            @Query("age") int age,
+            @Part MultipartBody.Part image // Gambar (opsional)
     );
+    @POST("user/change-password")
+    Call<ResponseBody> changePassword(
+            @Query("id") int id,
+            @Query("oldPassword") String oldPassword,
+            @Query("newPassword") String newPassword
+    );
+
+
 
     // Get user by ID
     @GET("user/{id}")

@@ -77,6 +77,6 @@ public class LoginActivity extends AppCompatActivity implements UserController.L
     // Implementasi callback login failure
     @Override
     public void onLoginFailure(String errorMessage) {
-        // Tidak perlu tambahan aksi, toast sudah ditangani di controller
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 }

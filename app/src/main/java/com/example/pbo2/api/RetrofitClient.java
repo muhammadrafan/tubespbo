@@ -5,7 +5,7 @@
     import retrofit2.converter.gson.GsonConverterFactory;
 
     public class RetrofitClient {
-        private static final String BASE_URL = "http://192.168.1.18:8080/MYBengkelBackend/"; // Ganti sesuai dengan URL backend Anda
+        private static final String BASE_URL = "http://192.168.18.41:8080/MYBengkelBackend/"; // Ganti sesuai dengan URL backend Anda
         private static Retrofit retrofit;
 
         public static Retrofit getRetrofitInstance() {
