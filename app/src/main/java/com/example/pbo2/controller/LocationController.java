@@ -1,79 +1,110 @@
 package com.example.pbo2.controller;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.pbo2.view.MainActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
 public class LocationController {
-    private MainActivity mainActivity;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
+    private Activity activity;
     private FusedLocationProviderClient fusedLocationClient;
 
-    public LocationController(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
-        this.fusedLocationClient = LocationServices.getFusedLocationProviderClient(mainActivity);
+    public interface LocationCallback {
+        void onLocationRetrieved(double latitude, double longitude);
+        void onError(String errorMessage);
     }
 
-    public void checkAndRequestLocationPermission() {
-        if (ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                android.content.pm.PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(mainActivity,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+    public LocationController(Activity activity) {
+        this.activity = activity;
+        this.fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
+    }
+    public void checkAndRequestLocationPermission(LocationCallback callback) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         } else {
-            getLocation();
+            getLocation(callback); // Kirim callback jika ada
         }
     }
 
-    private void getLocation() {
-        if (ContextCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_FINE_LOCATION)
+    public void requestLocation(LocationCallback callback) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        } else {
+            getLocation(callback);
+        }
+    }
+
+    public void getLocation(LocationCallback callback) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(mainActivity, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-                                double latitude = location.getLatitude();
-                                double longitude = location.getLongitude();
+                    .addOnSuccessListener(location -> {
+                        if (location != null) {
+                            double latitude = location.getLatitude();
+                            double longitude = location.getLongitude();
 
-                                // Panggil fungsi untuk mendapatkan kota dari koordinat
-                                getCityName(latitude, longitude);
+                            // Panggil callback jika tidak null
+                            if (callback != null) {
+                                callback.onLocationRetrieved(latitude, longitude);
                             } else {
-                                mainActivity.showToast("Gagal mendapatkan lokasi");
+                                Toast.makeText(activity, "Lokasi berhasil diperoleh: " + latitude + ", " + longitude, Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            if (callback != null) {
+                                callback.onError("Gagal mendapatkan lokasi.");
+                            } else {
+                                Toast.makeText(activity, "Gagal mendapatkan lokasi.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
+        } else {
+            if (callback != null) {
+                callback.onError("Izin lokasi belum diberikan.");
+            } else {
+                Toast.makeText(activity, "Izin lokasi belum diberikan.", Toast.LENGTH_SHORT).show();
+            }
         }
+    }
+    public void fetchLocationAndOpenMaps(double targetLatitude, double targetLongitude) {
+        requestLocation(new LocationCallback() {
+            @Override
+            public void onLocationRetrieved(double currentLatitude, double currentLongitude) {
+                // Format URI untuk Google Maps
+                String uri = "http://maps.google.com/maps?saddr=" + currentLatitude + "," + currentLongitude
+                        + "&daddr=" + targetLatitude + "," + targetLongitude;
+
+                // Intent untuk membuka Google Maps
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                intent.setPackage("com.google.android.apps.maps");
+
+                // Periksa apakah Google Maps tersedia
+                if (intent.resolveActivity(activity.getPackageManager()) != null) {
+                    activity.startActivity(intent);
+                } else {
+                    Toast.makeText(activity, "Google Maps tidak tersedia.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Toast.makeText(activity, errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    private void getCityName(double latitude, double longitude) {
-        Geocoder geocoder = new Geocoder(mainActivity, Locale.getDefault());
-        try {
-            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-            if (addresses != null && !addresses.isEmpty()) {
-                String city = addresses.get(0).getLocality();
-                String country = addresses.get(0).getCountryName();
-                mainActivity.showCityName(city, country);
-            } else {
-                mainActivity.showToast("Gagal mendapatkan nama kota");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            mainActivity.showToast("Error: " + e.getMessage());
-        }
-    }
 }

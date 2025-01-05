@@ -5,13 +5,9 @@
         android:id="@+id/home"
         android:title="home" />
     <item
-        android:icon="@drawable/history"
+        android:icon="@drawable/order"
         android:id="@+id/history"
         android:title="history" />
-    <item
-        android:icon="@drawable/order"
-        android:id="@+id/order"
-        android:title="order" />
     <item
         android:icon="@drawable/user"
         android:id="@+id/account"

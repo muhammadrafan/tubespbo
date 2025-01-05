@@ -13,7 +13,7 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/gambar_bengkel_foreground"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:usesCleartextTraffic="true"
@@ -27,9 +27,20 @@
         <activity android:name=".view.AccountActivity" />
         <activity android:name=".view.ChangePasswordActivity"
             android:exported="false"/>
+        <activity android:name=".view.UserRegisterKendaraanActivity"
+            android:exported="false"/>
+        <activity android:name=".view.ChangeBengkelActivity"
+            android:exported="false"/>
+        <activity android:name=".view.BengkelOrderActivity"
+            android:exported="false"/>
         <activity
             android:name=".view.RegisterActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.BengkelPeggunaActivity"
+            android:exported="false" />
+        <activity android:name=".view.HistoryActivity" />
+        <activity android:name=".view.HistoryDetailActivity" />
         <activity
             android:name=".view.LoginActivity"
             android:exported="true" >

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/bg_card"
+    android:elevation="4dp"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/card_order_pelanggan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Nama Pelanggan"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:ignore="DuplicateIds" />
+
+        <!-- Schedule -->
+    <TextView
+        android:id="@+id/textview_Jadwal_Order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Jadwal Perbaikan"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:ignore="DuplicateIds" />
+
+        <EditText
+            android:id="@+id/jadwal_order"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Jadwal Perbaikan"
+            android:inputType="text"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            tools:ignore="Autofill" />
+    <!-- layanan -->
+    <TextView
+        android:id="@+id/textview_layanan_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Layanan"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/layanan_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="layanan"
+        android:inputType="text"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+
+            <!-- Total Price -->
+    <TextView
+        android:id="@+id/textview_total_harga"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Harga "
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/harga_order"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Total Harga"
+                android:inputType="number"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+
+
+            <!-- Job Status -->
+
+
+    <CheckBox
+        android:id="@+id/statuspengerjaan_order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status Pengerjaan"
+        android:layout_marginBottom="16dp" />
+
+
+            <!-- Payment Status -->
+    <CheckBox
+        android:id="@+id/statuspembayaran_order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status Pembayaran"
+        android:layout_marginBottom="16dp" />
+    <Button
+        android:id="@+id/btn_open_maps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pergi ke Lokasi Pelanggan"
+        android:backgroundTint="@color/green"
+        android:textColor="@android:color/white" />
+    <Button
+        android:id="@+id/btn_submit_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Selesaikan Order"
+        android:backgroundTint="@color/green"
+        android:textColor="@android:color/white" />
+
+
+</LinearLayout>

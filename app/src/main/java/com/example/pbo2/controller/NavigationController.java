@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import com.example.pbo2.R;
 import com.example.pbo2.view.AccountActivity;
+import com.example.pbo2.view.HistoryActivity;
 import com.example.pbo2.view.MainActivity;
 
 public class NavigationController {
@@ -28,11 +29,14 @@ public class NavigationController {
                 currentActivity.finish(); // Tutup aktivitas sebelumnya
             }
             return true;
-        } else if (itemId == R.id.history) {
-            // Tambahkan logika jika halaman history ditambahkan nanti
-            return true;
-        } else if (itemId == R.id.order) {
+        }  else if (itemId == R.id.history) {
             // Tambahkan logika jika halaman order ditambahkan nanti
+            if (!(currentActivity instanceof HistoryActivity)) {
+                Intent orderIntent = new Intent(context, HistoryActivity.class);
+                context.startActivity(orderIntent);
+                currentActivity.overridePendingTransition(0, 0); // Animasi tanpa transisi
+                currentActivity.finish(); // Tutup aktivitas sebelumnya
+            }
             return true;
         } else if (itemId == R.id.account) {
             // Cek apakah pengguna sudah berada di AccountActivity

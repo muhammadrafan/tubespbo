@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pbo2.R;
-import com.example.pbo2.controller.UserController;
 import com.example.pbo2.helper.FileUtils;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -23,46 +22,59 @@ import java.io.IOException;
 import java.util.List;
 
 public class RegisterBengkelActivity extends AppCompatActivity {
-    private static final int PICK_IMAGE_REQUEST = 1;
 
-    private EditText regBengkelName, regBengkelAddress, regBengkelOpen;
-    private Button btnUploadImage, btnRegisterBengkel, btnPreviewMap;
+    private static final int PICK_IMAGE_REQUEST_BENGKEL = 200;
+
+    private EditText etBengkelName, etBengkelAddress, etBengkelOpen;
+    private Button btnPreviewMap, btnUploadBengkelImage, btnRegisterBengkel;
     private TextView regbengkelLogin;
 
-    private Uri imageUri;
-    private String imagePath;
-    private double latitude;
-    private double longitude;
+    private String selectedBengkelImagePath = null;
+    private double latitude = 0.0;
+    private double longitude = 0.0;
 
-    private String name, phoneNumber, age, role, password;
+    private String userName, userPhoneNumber, userAge, userRole, userPassword, userProfileImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_bengkel);
 
-        regBengkelName = findViewById(R.id.register_bengkel_name);
-        regBengkelAddress = findViewById(R.id.register_bengkel_address);
-        regBengkelOpen = findViewById(R.id.register_bengkel_open);
-        btnUploadImage = findViewById(R.id.register_bengkel_upload_image);
+        // Inisialisasi View
+        etBengkelName = findViewById(R.id.register_bengkel_name);
+        etBengkelAddress = findViewById(R.id.register_bengkel_address);
+        etBengkelOpen = findViewById(R.id.register_bengkel_open);
+        btnPreviewMap = findViewById(R.id.btn_preview_map);
+        btnUploadBengkelImage = findViewById(R.id.register_bengkel_upload_image);
         btnRegisterBengkel = findViewById(R.id.btn_register_bengkel);
         regbengkelLogin = findViewById(R.id.regbengkel_textlogin);
-        btnPreviewMap = findViewById(R.id.btn_preview_map);
 
+        // Ambil data dari RegisterActivity
         Intent intent = getIntent();
-        name = intent.getStringExtra("USER_NAME");
-        phoneNumber = intent.getStringExtra("USER_PHONE");
-        age = intent.getStringExtra("USER_AGE");
-        role = intent.getStringExtra("USER_ROLE");
-        password = intent.getStringExtra("USER_PASSWORD");
+        userName = intent.getStringExtra("USER_NAME");
+        userPhoneNumber = intent.getStringExtra("USER_PHONE");
+        userAge = intent.getStringExtra("USER_AGE");
+        userRole = intent.getStringExtra("USER_ROLE");
+        userPassword = intent.getStringExtra("USER_PASSWORD");
+        userProfileImage = intent.getStringExtra("USER_IMAGE");
 
-        btnUploadImage.setOnClickListener(v -> {
-            Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(pickImageIntent, PICK_IMAGE_REQUEST);
+        // Tombol Login
+        regbengkelLogin.setOnClickListener(v -> {
+            Intent loginIntent = new Intent(RegisterBengkelActivity.this, LoginActivity.class);
+            startActivity(loginIntent);
+            finish();
         });
 
+        // Pilih gambar bengkel
+        btnUploadBengkelImage.setOnClickListener(v -> {
+            Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType("image/*");
+            startActivityForResult(pickImageIntent, PICK_IMAGE_REQUEST_BENGKEL);
+        });
+
+        // Preview lokasi di Maps
         btnPreviewMap.setOnClickListener(v -> {
-            String address = regBengkelAddress.getText().toString().trim();
+            String address = etBengkelAddress.getText().toString().trim();
             if (address.isEmpty()) {
                 Toast.makeText(this, "Masukkan alamat bengkel terlebih dahulu!", Toast.LENGTH_SHORT).show();
                 return;
@@ -70,29 +82,34 @@ public class RegisterBengkelActivity extends AppCompatActivity {
             getCoordinatesFromAddress(address);
         });
 
+        // Tombol Daftar
         btnRegisterBengkel.setOnClickListener(v -> {
-            String bengkelName = regBengkelName.getText().toString().trim();
-            String bengkelAddress = regBengkelAddress.getText().toString().trim();
-            String bengkelOpen = regBengkelOpen.getText().toString().trim();
+            String bengkelName = etBengkelName.getText().toString().trim();
+            String bengkelAddress = etBengkelAddress.getText().toString().trim();
+            String bengkelOpen = etBengkelOpen.getText().toString().trim();
 
-            if (bengkelName.isEmpty() || bengkelAddress.isEmpty() || bengkelOpen.isEmpty() || imagePath == null || latitude == 0 || longitude == 0) {
+            if (bengkelName.isEmpty() || bengkelAddress.isEmpty() || bengkelOpen.isEmpty() || selectedBengkelImagePath == null || latitude == 0 || longitude == 0) {
                 Toast.makeText(RegisterBengkelActivity.this, "Mohon isi semua data dan pastikan koordinat telah diambil!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            UserController userController = new UserController(this, new UserController.RegisterCallback() {
-                @Override
-                public void onRegisterSuccess(int userId, String name, String phoneNumber, String age, String role) {
-                    Toast.makeText(RegisterBengkelActivity.this, "Registrasi berhasil!", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
+            // Kirim data kembali ke RegisterActivity
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("USER_NAME", userName);
+            resultIntent.putExtra("USER_PHONE", userPhoneNumber);
+            resultIntent.putExtra("USER_AGE", userAge);
+            resultIntent.putExtra("USER_ROLE", userRole);
+            resultIntent.putExtra("USER_PASSWORD", userPassword);
+            resultIntent.putExtra("USER_IMAGE", userProfileImage);
+            resultIntent.putExtra("BENGKEL_NAME", bengkelName);
+            resultIntent.putExtra("BENGKEL_ADDRESS", bengkelAddress);
+            resultIntent.putExtra("BENGKEL_OPEN", bengkelOpen);
+            resultIntent.putExtra("LATITUDE", latitude);
+            resultIntent.putExtra("LONGITUDE", longitude);
+            resultIntent.putExtra("BENGKEL_IMAGE", selectedBengkelImagePath);
 
-                @Override
-                public void onRegisterFailure(String errorMessage) {
-                    Toast.makeText(RegisterBengkelActivity.this, "Registrasi gagal: " + errorMessage, Toast.LENGTH_SHORT).show();
-                }
-            });
-            userController.register(name, phoneNumber, age, role, password, bengkelName, bengkelAddress, bengkelOpen, imagePath, latitude, longitude);
+            setResult(RESULT_OK, resultIntent);
+            finish();
         });
     }
 
@@ -132,15 +149,10 @@ public class RegisterBengkelActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            imagePath = FileUtils.getPath(this, imageUri);
-
-            if (imagePath != null) {
-                Toast.makeText(this, "Gambar berhasil dipilih!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Gagal mendapatkan path gambar!", Toast.LENGTH_SHORT).show();
-            }
+        if (requestCode == PICK_IMAGE_REQUEST_BENGKEL && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+            selectedBengkelImagePath = FileUtils.getPath(this, uri);
+            Toast.makeText(this, "Gambar Bengkel berhasil dipilih!", Toast.LENGTH_SHORT).show();
         }
     }
 }

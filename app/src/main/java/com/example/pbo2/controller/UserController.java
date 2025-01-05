@@ -32,7 +32,7 @@ public class UserController {
     }
 
     public interface RegisterCallback {
-        void onRegisterSuccess(int userId, String name, String phoneNumber, String age, String role);
+        void onRegisterSuccess(String message);
         void onRegisterFailure(String errorMessage);
     }
 
@@ -82,56 +82,56 @@ public class UserController {
 
     // Fitur Registrasi
     public void register(String name, String phoneNumber, String age, String role, String password,
-                         String bengkelName, String bengkelAddress, String bengkelOpen, String imagePath,
-                         double latitude, double longitude) {
+                         String bengkelName, String bengkelAddress, String bengkelOpen, String profileImagePath,
+                         String bengkelImagePath, double latitude, double longitude) {
 
         ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
 
-        // Buat RequestBody untuk parameter
         RequestBody nameBody = RequestBody.create(MediaType.parse("text/plain"), name);
-        RequestBody phoneNumberBody = RequestBody.create(MediaType.parse("text/plain"), phoneNumber);
+        RequestBody phoneBody = RequestBody.create(MediaType.parse("text/plain"), phoneNumber);
         RequestBody ageBody = RequestBody.create(MediaType.parse("text/plain"), age);
         RequestBody roleBody = RequestBody.create(MediaType.parse("text/plain"), role);
         RequestBody passwordBody = RequestBody.create(MediaType.parse("text/plain"), password);
-
-        // File gambar profil
-        MultipartBody.Part profileImagePart = null;
-        if (imagePath != null) {
-            File file = new File(imagePath);
-            RequestBody fileBody = RequestBody.create(MediaType.parse("image/jpeg"), file);
-            profileImagePart = MultipartBody.Part.createFormData("profileImage", file.getName(), fileBody);
-        }
-
-        // Parameter opsional untuk Bengkel
         RequestBody bengkelNameBody = bengkelName != null ? RequestBody.create(MediaType.parse("text/plain"), bengkelName) : null;
         RequestBody bengkelAddressBody = bengkelAddress != null ? RequestBody.create(MediaType.parse("text/plain"), bengkelAddress) : null;
         RequestBody bengkelOpenBody = bengkelOpen != null ? RequestBody.create(MediaType.parse("text/plain"), bengkelOpen) : null;
-        RequestBody latitudeBody = latitude != 0 ? RequestBody.create(MediaType.parse("text/plain"), String.valueOf(latitude)) : null;
-        RequestBody longitudeBody = longitude != 0 ? RequestBody.create(MediaType.parse("text/plain"), String.valueOf(longitude)) : null;
+        RequestBody latitudeBody = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(latitude));
+        RequestBody longitudeBody = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(longitude));
 
-        // Panggil API
+        MultipartBody.Part profileImagePart = createMultipartBody("profileImage", profileImagePath);
+        MultipartBody.Part bengkelImagePart = createMultipartBody("bengkelImage", bengkelImagePath);
+
         Call<ResponseBody> call = apiService.register(
-                nameBody, phoneNumberBody, ageBody, roleBody, passwordBody, profileImagePart,
-                bengkelNameBody, bengkelAddressBody, bengkelOpenBody, latitudeBody, longitudeBody
+                nameBody, phoneBody, ageBody, roleBody, passwordBody,
+                profileImagePart, bengkelImagePart, bengkelNameBody,
+                bengkelAddressBody, bengkelOpenBody, latitudeBody, longitudeBody
         );
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    registerCallback.onRegisterSuccess(1, name, phoneNumber, age, role);
-                    Toast.makeText(context, "Registrasi Berhasil!", Toast.LENGTH_SHORT).show();
+                    registerCallback.onRegisterSuccess("Registrasi berhasil!");
                 } else {
                     registerCallback.onRegisterFailure("Registrasi gagal. Coba lagi.");
-                    Toast.makeText(context, "Registrasi gagal. Coba lagi.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 registerCallback.onRegisterFailure("Gagal menghubungi server: " + t.getMessage());
-                Toast.makeText(context, "Gagal menghubungi server: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private MultipartBody.Part createMultipartBody(String partName, String filePath) {
+        if (filePath != null) {
+            File file = new File(filePath);
+            if (file.exists()) {
+                RequestBody fileBody = RequestBody.create(MediaType.parse("image/jpeg"), file);
+                return MultipartBody.Part.createFormData(partName, file.getName(), fileBody);
+            }
+        }
+        return null;
     }
 }

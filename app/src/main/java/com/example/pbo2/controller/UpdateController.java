@@ -68,4 +68,42 @@ public class UpdateController {
             }
         });
     }
+    // Method untuk memperbarui latitude dan longitude
+    public void updateLocation(int userId, double latitude, double longitude, Context context) {
+        apiService.updateLocation(userId, latitude, longitude).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, "Lokasi berhasil diperbarui.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Gagal memperbarui lokasi. Silakan coba lagi.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(context, "Kesalahan jaringan: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    public void updateReview(int idOrder, int review, Context context) {
+        // Memanggil API untuk mengubah review
+        apiService.submitOrderReview(idOrder, review).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, "Review berhasil diperbarui!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Gagal memperbarui review.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(context, "Kesalahan: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
 }

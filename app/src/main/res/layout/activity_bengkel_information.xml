@@ -1,0 +1,48 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/bengkel_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/error_image" />
+
+    <TextView
+        android:id="@+id/bengkel_name"
+        android:layout_below="@id/bengkel_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Nama Bengkel"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/bengkel_address"
+        android:layout_below="@id/bengkel_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Alamat Bengkel"
+        android:textSize="14sp" />
+
+    <Spinner
+        android:id="@+id/spinner_kendaraan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bengkel_address"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/button_pesan_bengkel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinner_kendaraan"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/green"
+        android:text="Pesan Bengkel" />
+</LinearLayout>

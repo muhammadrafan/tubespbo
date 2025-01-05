@@ -77,7 +77,14 @@ public class AccountActivity extends AppCompatActivity {
         tambahKendaraanSection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), UserRegisterKendaraanActivity.class));
+            }
+        });
+
+        alamatBengkelSection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ChangeBengkelActivity.class));
             }
         });
 
